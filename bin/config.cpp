@@ -1,6 +1,7 @@
-#ifndef CONFIG_H
-	#include "config.h"
-#endif
+#include <fstream>
+#include <iostream>
+#include <unistd.h>
+#include "config.h"
 
 // Runs from "ROOT/bin", which is why we discard the last four characters
 std::string bship::getRoot(){
@@ -23,6 +24,6 @@ void bship::log(std::string message){
 	else {
 		// std::cout << "Failed to open " << std::endl;
 		printf("Failed to open log file at [%s]\n",
-			string(bship::logs + "\\log").c_str());
+			std::string(bship::logs + "\\log0").c_str());
 	}
 }

@@ -3,14 +3,6 @@
 
 #include "termfuncs.h"
 #include "config.h"
-#include "configGen.h"
-#include "configIO.h"
-#include "readASCII.h"
-#include "dynamicArray.h"
-#include "buttons.h"
-#include "structures.h"
-
-// #include "menu.h"  // Causes compilation error ._.
 
 namespace bship{
 	static std::string	COMMENT		= "//";
@@ -18,9 +10,6 @@ namespace bship{
 	extern int 		INIT_FAILURE;
 
 	std::string termPipe(std::string cmd);
-
-	Frame* initGame();
-	void drawFrame(Frame *frame);
 }
 
 // Sample functions

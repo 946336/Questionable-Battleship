@@ -4,9 +4,9 @@
 #include <sys/stat.h>
 #include <sstream>
 #include <ctime>
-#ifndef CONFIGGEN_H
-	#include "configGen.h"
-#endif
+#include "configGen.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -81,5 +81,30 @@ void bumpLogs(){
 			rename((bship::logs + "log" + postfix).c_str(),
 					(bship::logs + "log" + newPostfix).c_str());
 		}
+	}
+}
+
+bool checkPermissions(){
+	if(!canReadWrite()){
+		// Possibly the most redundant line of code I've seen in my life
+		// bship::log("Need read/write/modify permissions!");
+		cerr << "Lack read/write/modify permissions in current directory. "
+			 << "Questionable Battleship may not function correctly or at all."
+			 << endl << std::flush;
+		return false;
+	}
+	else return true;
+}
+
+bool spawnMainConfig(){
+	if(!exists(bship::root + "battleship.config")){
+		if(!writeFile("battleship.config", bship::mainConfig)){
+			return false;
+		}
+		return true;
+	}
+	else {
+		bship::log("Main config file detected, no write necessary");
+		return true;
 	}
 }

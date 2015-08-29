@@ -1,48 +1,28 @@
 #include <cstdlib>
-#include <sstream>
 #include <cstdio>
+#include <string>
 
-#ifndef BSHIP_H
-	#include "bship.h"
-#endif
-#ifndef STRUCTURES_H
-	#include "structures.h"
-#endif
+#include "bship.h"
 
 int bship::INIT_FAILURE = 1;
 
-bship::Frame* bship::initGame(){
-	std::stringstream ss;
-	int fHeight, fWidth;
-
-	// open pipe to get terminal dimensions
-	string dims = termPipe("stty size");
-
-	// create board of same width, one or two lines less in height
-	// dims has format: "$ROWS $COLUMNS"
-	ss << dims;
-	ss >> fHeight >> fWidth;
-
-	// Create bucket of things to print
-	Frame *frame = new Frame(fHeight, fWidth);
-	return frame;
-}
-
 std::string bship::termPipe(std::string cmd){
-	string ret;
-	char buf[16];
+	std::string ret;
+	char buf[256];
 	FILE *stream = popen(cmd.c_str(), "r");
 	if(stream){
 		if(!feof(stream)){
-			if(fgets(buf, 15, stream) == NULL){
-				log("Failed to get response!");
+			if(fgets(buf, 255, stream) == NULL){
+				log("Failed to get response for the following command:");
+				log(cmd);
 			}
 		}
 	}
 	pclose(stream);
 	// I'm not currently familiar with standard c-string handling
-	ret = string(buf);
-	// You can't return a termporary object
+	ret = std::string(buf);
+	// You can't return a termporary object, but how is ret less
+	// temporary than buf?
 	return ret;
 }
 
