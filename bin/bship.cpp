@@ -19,6 +19,10 @@ std::string bship::termPipe(std::string cmd){
 		}
 	}
 	pclose(stream);
+
+	log("Command: " + cmd);
+	log("Response: " + std::string(buf));
+
 	// I'm not currently familiar with standard c-string handling
 	ret = std::string(buf);
 	// You can't return a termporary object, but how is ret less

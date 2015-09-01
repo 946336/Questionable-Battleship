@@ -1,5 +1,14 @@
-Sat Aug 15 20:25:32 2015
+Tue Sep  1 23:27:32 2015
 
-Main config file detected, no write necessary
-Game initialized: Enterng Main Menu
+Relative paths from: /home/wes946336/Documents/QuestionableBattleship
+Checking for main config at: /battleship.config
+Main config file detected
+Reading config file at /battleship.config
+Game initialized.
+Command: tput cols
+Response: 83
+
+Command: tput lines
+Response: 42
+
 Bumping logs

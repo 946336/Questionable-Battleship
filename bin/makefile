@@ -1,21 +1,21 @@
 # Makefile for the contents of Battleship/bin/
 
 CXX = g++
-FLAGS = -Wall -Wextra -g -std=gnu++11
+CXXFLAGS = -Wall -Wextra -g -std=gnu++11
 UNUSED = -Wno-unused-function
 O = -c
 
-default:
-	$(CXX) $(FLAGS) $(O) $^ -o bship
+default: main.cpp config.o configGen.o bship.o termfuncs.o menuElement.o \
+	utilStructures.o dynamicArray.o menu.o frame.o scrollBox.o
+	$(CXX) $(CXXFLAGS) $^ -o bship
 
-config.o: config.cpp
-	$(CXX) $(FLAGS) $(O) $^
+menu: test.cpp utilStructures.o dynamicArray.o menuElement.o frame.o \
+			config.o menu.o termfuncs.o bship.o
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 configGen.o: configGen.cpp config.cpp
-	$(CXX) $(FLAGS) $(O) $^
 
 bship.o: bship.cpp termfuncs.cpp config.cpp
-	$(CXX) $(FLAGS) $(O) $^
 
 clean:
 	rm *.o

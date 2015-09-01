@@ -1,11 +1,10 @@
 #ifndef DYNAMIC_ARRAY_BODY_CPP
 #define DYNAMIC_ARRAY_BODY_CPP
 
-#ifndef DYNAMICARAY_H
-	#include "dynamicArray.h"
-#endif
+#include "dynamicArray.h"
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 template <typename T>
 dynArray<T>::dynArray(){
@@ -26,6 +25,7 @@ template <typename T>
 dynArray<T>::dynArray(int cap){
 	arr = new T[size];
 	capacity = cap;
+	size = 0;
 }
 
 template <typename T>
@@ -38,7 +38,7 @@ subscript overload
 Also this isn't safe :\
 */
 template <typename T>
-T& dynArray<T>::operator[] (int &index){
+T& dynArray<T>::operator[] (int index){
 	return arr[index];
 }
 
@@ -71,10 +71,16 @@ dynArray<T>& dynArray<T>::operator= (const dynArray &source){
 }
 
 template <typename T>
+dynArray<T>& dynArray<T>::operator+= (const T& source){
+	this->add(source);
+	return *this;
+}
+
+template <typename T>
 bool dynArray<T>::expand(){
 	int newCap = 2 + 2 * capacity;
 	T *newArr = new T[newCap];
-	for(int i = 0; i < size; ++i){
+	for(int i = 0; i < capacity; ++i){
 		newArr[i] = arr[i];
 	}
 	delete [] arr;
@@ -85,7 +91,7 @@ bool dynArray<T>::expand(){
 
 template <typename T>
 bool dynArray<T>::add(T newElement){
-	if(size >= capacity){
+	if(size == capacity){
 		if(!expand()) return false;
 	}
 	arr[size] = newElement;
@@ -96,6 +102,22 @@ bool dynArray<T>::add(T newElement){
 template <typename T>
 int dynArray<T>::getSize(){
 	return size;
+}
+
+template <typename T>
+bool dynArray<T>::isEmpty(){
+	return size == 0;
+}
+
+template<typename T>
+T& dynArray<T>::at(int where){
+	if(where < 0){
+		throw std::out_of_range ("dynArray access out of bounds: negative index");
+	}
+	else if(where >= size){
+		throw std::out_of_range ("dynArray access out of bounds: index exceeds stored elements");
+	}
+	return arr[where];
 }
 
 #endif

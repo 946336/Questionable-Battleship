@@ -12,13 +12,19 @@ struct dynArray{
 		dynArray(const dynArray &source);
 		~dynArray();
 
-		T& operator[] (int &index);
-		dynArray& operator= (const dynArray &source);
+		T& operator[] (int index);
+		dynArray<T>& operator= (const dynArray &source);
+		dynArray<T>& operator+= (const T &source);
 
 		int getSize();
 		bool add(T newElement);
+		T& at(int where);
+		bool isEmpty();
 
-		// a
+		friend class MainMenu;
+		friend class SettingsMenu;
+		friend class PauseMenu;
+
 	private:
 		T *arr;
 		int size, capacity;

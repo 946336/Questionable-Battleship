@@ -2,21 +2,31 @@
 #define CONFIG_H
 
 #include <vector>
+#include <fstream>
+#include <tuple>
 #include <string>
+#include "dynamicArray.h"
 
 namespace bship {
 
-	static std::string version = "VER 0.00.001";
-	static std::string dev = "(c) 946336";
-	static std::string title = "Questionable Battleship";
-	static std::string backMessage = "q to go back";
+	using setPair = std::pair<std::string, std::string>;
+
+	static std::string	COMMENT		= "//";
 
 	std::string getRoot();
+	std::string fromRoot(std::string path);
+
 	void log(std::string message);
 
-	static std::vector<std::string>::iterator it;
-	static std::string root = bship::getRoot();
-	static std::string logs = bship::getRoot() + "logs/";
+	static std::string ROOT = bship::getRoot();
+	static std::string LOGS = bship::getRoot() + "logs/";
+
+	dynArray<setPair> readConfig(std::string path = ROOT +
+		"battleship.config");
+	dynArray<setPair> parseSettingLines(std::ifstream &f);
+
+	std::string findSetting(dynArray<setPair> lib, std::string name);
+	std::string findSetting(std::string name, dynArray<setPair> lib);
 }
 
 #endif

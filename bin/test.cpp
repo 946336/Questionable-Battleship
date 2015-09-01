@@ -1,11 +1,23 @@
+#include "menu.h"
 #include <iostream>
-#include <cctype>
-#include "bship.h"
 
-typedef void (*FuncPoint)();
+using std::endl;
+using std::cout;
 
 int main(){
 
+	MainMenu menuMain;
 
-	return 0;
+	auto list = menuMain.vomit();
+	auto logo = menuMain.getLogo();
+
+	for(int i= 0; i < logo.getSize(); ++i){
+		cout << logo[i] << endl;
+	}
+
+	for(int i = 0; i < list.getSize(); ++i){
+		cout << list[i] << endl;
+	}
+
+	return 77;
 }

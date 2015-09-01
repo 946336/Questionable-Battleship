@@ -2,25 +2,31 @@
 // Don't change things here unless you want to change them for all
 // players on this machine!
 
-menuAnimations=false
+// Also, we don't do integrity checks here, so if you feel like
+// you've screwed something up, just delete this file and it'll
+// magically reappear next time you play, albeit with its
+// default values.
+
+menu_animations=false
 sound=false
 
 // options are: none, some, whee, superfluous,
-// OHGODWHYWOULDYOUWANTTHISMANY 
-gameAnimations=some
+// OHGODWHYWOULDYOUWANTTHISMANY
+game_animations=some
 
-// none, mild, more, lots
-// these names will change in game 
+// none, mild, lots, more
+// these names will change in game
 profanity=none
 
 // 0-100
-volumeMaster=100
-volumeMenu=100
-volumeGame=100
-volumeSFX=100
+// master_volume=100
+// menu_volume=100
+// game_volume=100
+// SFX_volume=100
 
 // gives the ai an extra patrol boat and aircraft carrier
-waitWhat=false
+wait_what=false
 // this number isn't the same as the "name" of the difficulty level!
 // those names are found within the ai config files
-defaultAiDifficulty=3
+default_ai_difficulty_level=3
+
