@@ -1,4 +1,4 @@
-Tue Sep  1 23:28:07 2015
+Fri Sep  4 00:44:34 2015
 
 Relative paths from: /home/wes946336/Documents/QuestionableBattleship
 Checking for main config at: /battleship.config
@@ -11,4 +11,7 @@ Response: 83
 Command: tput lines
 Response: 42
 
+Displaying initial frame
+Going back
+Exiting game
 Bumping logs

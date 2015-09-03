@@ -27,12 +27,18 @@ MainMenu::MainMenu(){
 	el += MenuElement("PROFILE", whee);
 	el += MenuElement("CREDITS", whee);
 	el += MenuElement("QUIT", whee);
+
+	size_t numEl = el.getSize();
+	for(size_t i = 0; i < numEl; ++i){
+		text += NULL;
+	}
 }
 
 MainMenu::MainMenu(const MainMenu &source){
 	el = source.el;
 	logo = source.logo;
 	selected = source.selected;
+	text = source.text;
 }
 
 MainMenu::MainMenu(const std::string *lb,
@@ -52,6 +58,11 @@ MainMenu::MainMenu(const std::string *lb,
 
 	for(int i = 0; i < len; ++i){
 		el += MenuElement(lb[i], cb[i]);
+	}
+
+	size_t numEl = el.getSize();
+	for(size_t i = 0; i < numEl; ++i){
+		text += NULL;
 	}
 }
 
@@ -73,6 +84,11 @@ MainMenu::MainMenu(const MenuElement::mcb *cb,
 	for(int i = 0; i < len; ++i){
 		el += MenuElement(lb[i], cb[i]);
 	}
+
+	size_t numEl = el.getSize();
+	for(size_t i = 0; i < numEl; ++i){
+		text += NULL;
+	}
 }
 
 MainMenu::~MainMenu(){
@@ -84,56 +100,9 @@ MainMenu& MainMenu::operator= (const MainMenu &source){
 		el = source.el;
 		logo = source.logo;
 		selected = source.selected;
+		text = source.text;
 	}
 	return *this;
-}
-
-MainMenu& MainMenu::operator+ (const MenuElement &source){
-	el += source;
-	return *this;
-}
-
-MainMenu& MainMenu::operator+= (const MenuElement &source){
-	el += source;
-	return *this;
-}
-
-MainMenu& MainMenu::operator++(){
-	++selected;
-	if(selected >= el.getSize()){
-		selected = 0;
-	}
-	return *this;
-}
-
-MainMenu MainMenu::operator++(__attribute__((unused)) int dummy){
-	MainMenu temp(*this);
-	++selected;
-	if(selected >= el.getSize()){
-		selected = 0;
-	}
-	return temp;
-}
-
-MainMenu& MainMenu::operator--(){
-	--selected;
-	if(selected < 0){
-		selected = el.getSize() - 1;
-	}
-	return *this;
-}
-
-MainMenu MainMenu::operator--(__attribute__((unused)) int dummy){
-	MainMenu temp(*this);
-	--selected;
-	if(selected < 0){
-		selected = el.getSize() - 1;
-	}
-	return temp;
-}
-
-void MainMenu::add(MenuElement toAdd){
-	el += toAdd;
 }
 
 dynArray<std::string> MainMenu::vomit(){
@@ -147,6 +116,18 @@ dynArray<std::string> MainMenu::vomit(){
 
 dynArray<std::string> MainMenu::getLogo(){
 	return logo;
+}
+
+int MainMenu::maxLen(){
+	int lim = el.getSize();
+	int len = -1;
+
+	for(int i = 0 ; i < lim; ++i){
+		if((int) el[i].getLabel().length() > len){
+			len = (int) el[i].getLabel().length();
+		}
+	}
+	return len;
 }
 
 /*

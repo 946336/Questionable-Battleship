@@ -21,6 +21,8 @@ class MenuBaseClass{
 		typedef void (*fap[])();	// top kek
 
 	protected:
+		dynArray<MenuElement> el;
+		
 		MenuBaseClass *last;
 		int selected = 0;
 		MODE mode;
@@ -43,25 +45,16 @@ class MainMenu : public MenuBaseClass{
 		~MainMenu();
 
 		MainMenu& operator= (const MainMenu &source);
-		MainMenu& operator+ (const MenuElement &source);
-		MainMenu& operator+= (const MenuElement &source);
-		MainMenu& operator++ (); // Prefix
-		MainMenu operator++ (int dummy); // Postfix
-		MainMenu& operator-- (); // Prefix
-		MainMenu operator-- (int dummy); // Postfix
-
-		// Add a menu entry
-		void add(MenuElement toAdd);
 
 		// Dump the "descriptors" of all menu elements
 		dynArray<std::string> vomit();
 		dynArray<std::string> getLogo();
 
 	private:
-		dynArray<MenuElement> el;
 		dynArray<std::string> logo;
 		dynArray<fp> text;		// need to track which buttons have
 								// scrollBoxes
+		int maxLen();
 };
 
 class OptionsMenu : public MenuBaseClass{

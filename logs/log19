@@ -1,4 +1,4 @@
-Tue Sep  1 23:11:19 2015
+Fri Sep  4 00:30:28 2015
 
 Relative paths from: /home/wes946336/Documents/QuestionableBattleship
 Checking for main config at: /battleship.config
@@ -6,7 +6,7 @@ Main config file detected
 Reading config file at /battleship.config
 Game initialized.
 Command: tput cols
-Response: 168
+Response: 83
 
 Command: tput lines
 Response: 42

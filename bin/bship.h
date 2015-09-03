@@ -7,7 +7,7 @@
 namespace bship{
 	extern int 		INIT_FAILURE;
 
-	static std::string VERSION = "VER 0.00.001";
+	static std::string VERSION = "VER InDev";
 	static std::string DEV = "(c) 946336";
 	static std::string TITLE = "Questionable Battleship";
 	static std::string BACKMESSAGE = "'q' to go back";

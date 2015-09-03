@@ -120,6 +120,7 @@ int s2i(std::string str){
 
 void bumpLogs(){
 	// push up all existing log designations, and overwrite the 20th one
+	bship::log("------------------------------");
 	bship::log("Bumping logs");
 	for(int i = 19; i >= 0; --i){
 		string postfix = i2s(i);
