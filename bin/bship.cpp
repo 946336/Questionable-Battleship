@@ -30,9 +30,10 @@ std::string bship::termPipe(std::string cmd){
 	return ret;
 }
 
-void whee(){
+void *whee(){
 	bship::log("Wheeeeeeeee");
 	screen_home();
+	return NULL;
 }
 void why(){
 	bship::log("Whyyyyyyyyyy");

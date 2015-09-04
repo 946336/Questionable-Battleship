@@ -55,6 +55,6 @@ void MenuElement::setCallback(MenuElement::mcb cbk){
 	cb = cbk;
 }
 
-void MenuElement::callback(){
-	cb();
+MenuElement::mcb MenuElement::callback(){
+	return cb;
 }

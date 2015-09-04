@@ -21,8 +21,9 @@ struct dynArray{
 		T& at(int where);
 		bool isEmpty();
 
+		friend class MenuBaseClass;
 		friend class MainMenu;
-		friend class SettingsMenu;
+		friend class OptionsMenu;
 		friend class PauseMenu;
 
 	private:

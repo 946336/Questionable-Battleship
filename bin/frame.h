@@ -51,6 +51,7 @@ class Frame{
 
 		// Specialized handling functions for various standard menus
 		void updateMain();
+		void updatePlay();
 
 		// To allow destructor to not leak
 		void deduceTypeAndDelete(MBC *pointer);

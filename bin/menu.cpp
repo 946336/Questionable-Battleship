@@ -6,6 +6,44 @@
 #include <fstream>
 #include <iostream>
 
+/**************************************************************/
+
+namespace {
+	void* menuPlay(){
+		auto cb = &MainMenu::goPlay;
+		return cb;
+	}
+}
+
+/*******************************************************************/
+
+dynArray<std::string> MenuBaseClass::vomit(){
+	dynArray<std::string> newList;
+
+	for(int i = 0; i < el.getSize(); ++i){
+		newList += el[i].getLabel();
+	}
+	return newList;
+}
+
+int MenuBaseClass::maxLen(){
+	int lim = el.getSize();
+	int len = -1;
+
+	for(int i = 0 ; i < lim; ++i){
+		if((int) el[i].getLabel().length() > len){
+			len = (int) el[i].getLabel().length();
+		}
+	}
+	return len;
+}
+
+dynArray<std::string> MenuBaseClass::getLogo(){
+	return logo;
+}
+
+/******************************************************************/
+
 MainMenu::MainMenu(){
 	last = NULL;
 	selected = 0;
@@ -21,7 +59,7 @@ MainMenu::MainMenu(){
 		}
 	}
 	else {std::cerr << "Failed to open file\n";}
-	el += MenuElement("PLOY", whee);
+	el += MenuElement("PLOY", menuPlay);
 	el += MenuElement("CONTINUE", whee);
 	el += MenuElement("OPTIONS", whee);
 	el += MenuElement("PROFILE", whee);
@@ -32,6 +70,9 @@ MainMenu::MainMenu(){
 	for(size_t i = 0; i < numEl; ++i){
 		text += NULL;
 	}
+
+	// initialize all second-level menus
+	play = new PlayMenu(this);
 }
 
 MainMenu::MainMenu(const MainMenu &source){
@@ -39,6 +80,8 @@ MainMenu::MainMenu(const MainMenu &source){
 	logo = source.logo;
 	selected = source.selected;
 	text = source.text;
+
+	play = source.play;
 }
 
 MainMenu::MainMenu(const std::string *lb,
@@ -64,6 +107,8 @@ MainMenu::MainMenu(const std::string *lb,
 	for(size_t i = 0; i < numEl; ++i){
 		text += NULL;
 	}
+
+	play = new PlayMenu(this);
 }
 
 MainMenu::MainMenu(const MenuElement::mcb *cb,
@@ -89,10 +134,12 @@ MainMenu::MainMenu(const MenuElement::mcb *cb,
 	for(size_t i = 0; i < numEl; ++i){
 		text += NULL;
 	}
+
+	play = new PlayMenu(this);
 }
 
 MainMenu::~MainMenu(){
-	// Nothing to do here
+	delete play;
 }
 
 MainMenu& MainMenu::operator= (const MainMenu &source){
@@ -101,33 +148,87 @@ MainMenu& MainMenu::operator= (const MainMenu &source){
 		logo = source.logo;
 		selected = source.selected;
 		text = source.text;
+
+		play = source.play;
 	}
 	return *this;
 }
 
-dynArray<std::string> MainMenu::vomit(){
-	dynArray<std::string> newList;
-
-	for(int i = 0; i < el.getSize(); ++i){
-		newList += el.arr[i].getLabel();
-	}
-	return newList;
+void *MainMenu::goPlay(){
+	return static_cast<void*> (&play);
 }
 
-dynArray<std::string> MainMenu::getLogo(){
-	return logo;
-}
+/*************************************************************/
 
-int MainMenu::maxLen(){
-	int lim = el.getSize();
-	int len = -1;
+PlayMenu::PlayMenu(){
+	mode = MBC::PLAY;
 
-	for(int i = 0 ; i < lim; ++i){
-		if((int) el[i].getLabel().length() > len){
-			len = (int) el[i].getLabel().length();
+	el += MenuElement("NEW", whee);
+	el += MenuElement("LOAD", whee);
+
+	last = NULL;
+
+	std::ifstream readLogo;
+	std::string path = bship::ROOT + "resources/ASCII/menu/play/splash";
+	readLogo.open(path.c_str());
+	if(readLogo.is_open()){
+		std::string temp;
+		while(getline(readLogo, temp)){
+			logo += temp;
 		}
 	}
-	return len;
+
+	int len = el.getSize();
+	for(int i = 0; i < len; ++i){
+		text += NULL;
+	}
+}
+
+PlayMenu::PlayMenu(const PlayMenu &source){
+	mode = source.mode;
+	el = source.el;
+	last = source.last;
+	text = source.text;
+	logo = source.logo;
+}
+
+PlayMenu::PlayMenu(MBC *from){
+	mode = MBC::PLAY;
+
+	el += MenuElement("NEW", whee);
+	el += MenuElement("LOAD", whee);
+
+	last = from;
+
+	std::ifstream readLogo;
+	std::string path = bship::ROOT + "resources/ASCII/menu/play/splash";
+	readLogo.open(path.c_str());
+	if(readLogo.is_open()){
+		std::string temp;
+		while(getline(readLogo, temp)){
+			logo += temp;
+		}
+	}
+
+	int len = el.getSize();
+	for(int i = 0; i < len; ++i){
+		text += NULL;
+	}
+}
+
+PlayMenu& PlayMenu::operator= (const PlayMenu &source){
+	if(this != &source){
+		mode = source.mode;
+		el = source.el;
+		last = source.last;
+		text = source.text;
+		logo = source.logo;
+	}
+	return *this;
+}
+
+PlayMenu::~PlayMenu(){
+	// Nothing to do here
 }
 
 /*

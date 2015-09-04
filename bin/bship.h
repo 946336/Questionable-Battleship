@@ -16,7 +16,7 @@ namespace bship{
 }
 
 // Sample functions
-void whee();
+void *whee();
 void why();
 void again();
 void Hi();

@@ -5,7 +5,7 @@
 
 struct MenuElement{
 	public:
-		typedef void (*mcb)();
+		typedef void *(*mcb)();
 
 		MenuElement();
 		MenuElement(const std::string lbl);
@@ -21,7 +21,7 @@ struct MenuElement{
 		std::string getLabel();
 
 		void setCallback(mcb mcbk);
-		void callback();
+		mcb callback();
 
 	private:
 		mcb cb;				// Callback

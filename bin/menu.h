@@ -14,14 +14,21 @@ class MenuBaseClass{
 	public:
 		friend class Frame;
 
-		enum MODE {NONE, MAIN, OPTIONS, TEXT, GAME, PAUSE, SPLASH};
+		enum MODE {MAIN, PLAY, OPTIONS, TEXT, GAME, PAUSE, SPLASH};
 
 		// Is this how you typedef a pointer to a void function? 
-		typedef void (*fp)();		// see MenuElement::mcb
-		typedef void (*fap[])();	// top kek
+		typedef void *(*fp)();		// see MenuElement::mcb
+		typedef void *(*fap[])();	// top kek
+
+		// Dump the "descriptors" of all menu elements
+		dynArray<std::string> vomit();
+		int maxLen();
+
+		dynArray<std::string> getLogo();
 
 	protected:
 		dynArray<MenuElement> el;
+		dynArray<std::string> logo;
 		
 		MenuBaseClass *last;
 		int selected = 0;
@@ -29,6 +36,12 @@ class MenuBaseClass{
 };
 
 using MBC = MenuBaseClass;
+
+class MainMenu;
+class PlayMenu;
+class OptionsMenu;
+class Creditsmenu;
+class ProfileMenu;
 
 /*************************************************************************************/
 class MainMenu : public MenuBaseClass{
@@ -46,15 +59,28 @@ class MainMenu : public MenuBaseClass{
 
 		MainMenu& operator= (const MainMenu &source);
 
-		// Dump the "descriptors" of all menu elements
-		dynArray<std::string> vomit();
-		dynArray<std::string> getLogo();
+		static void* goPlay();
 
 	private:
-		dynArray<std::string> logo;
 		dynArray<fp> text;		// need to track which buttons have
 								// scrollBoxes
-		int maxLen();
+
+		static PlayMenu *play;
+};
+
+class PlayMenu : public MenuBaseClass{
+	public:
+		friend class Frame;
+
+		PlayMenu();
+		PlayMenu(const PlayMenu &source);
+		PlayMenu(MBC *from);
+		~PlayMenu();
+
+		PlayMenu& operator= (const PlayMenu &source);
+	private:
+		// Handle the LOAD ScrollBox
+		dynArray<fp> text;
 };
 
 class OptionsMenu : public MenuBaseClass{

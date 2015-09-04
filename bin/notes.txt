@@ -26,4 +26,4 @@ ___  ____ ___ ___ _    ____ ____ _  _ _ ___    /  /  /
 
 miniLogo is in cybersmall
 
-http://patorjk.com/software/taag/#p=display&f=Speed&t=
+http://patorjk.com/software/taag/#p=display&f=Cybermedium&t=

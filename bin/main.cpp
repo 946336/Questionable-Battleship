@@ -38,8 +38,12 @@ int main(){
 		switch (action = std::tolower(getachar())){
 			case 'q':
 				// bship::log("Going back");
+				// If not main menu, go to previous menu
+				if(frame.getLast()){
+					frame.back();
+					continue;
+				}
 				DONE = true;
-				screen_clear();
 				break;
 			case 'w':
 				frame.up();
@@ -48,7 +52,7 @@ int main(){
 				frame.down();
 				break;
 			case '\n':
-				// bship::log("Entering");
+				// bship::log("Entering " + c->el[c->selected] + " menu");
 				frame.select();
 				break;
 			default:
@@ -57,7 +61,8 @@ int main(){
 		// cerr << action;
 		screen_home();
 	}
-
+	
+	screen_clear();
 	bship::log("Exiting game");
 	return 0;
 }

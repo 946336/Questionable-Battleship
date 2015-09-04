@@ -71,6 +71,7 @@ Frame::Frame(const Frame &source){
 		}
 	}
 	deduceTypeAndDelete(c);
+	c = source.c;
 }
 
 Frame::~Frame(){
@@ -80,15 +81,16 @@ Frame::~Frame(){
 		}
 		delete [] frame;
 	}
-	auto d = static_cast<MainMenu*>(c);
-	delete d;
+	deduceTypeAndDelete(c);
+	// auto d = static_cast<MainMenu*>(c);
+	// delete d;
 }
 
 void Frame::deduceTypeAndDelete(MBC *pointer){
 	switch(c->mode){
 		case MBC::MODE::MAIN:
 		pointer = static_cast<MainMenu*>(pointer);
-		delete c;
+		delete pointer;
 		break;
 	}
 }
@@ -138,8 +140,6 @@ MBC *Frame::changeMenu(MBC *newMenu){
 	c = newMenu;
 	newMenu->last = temp;
 
-	this->disp();
-
 	return temp;
 }
 
@@ -164,6 +164,13 @@ void Frame::back(){
 bool Frame::select(){
 	// run the callback, change menus and note last
 	std::cerr << "BUTTON HAS BEEN PRESSED";
+
+	auto cb = c->el[c->selected].callback();
+	if(!cb) return false;
+
+	changeMenu(static_cast<MBC*>(cb()));
+
+	return true;
 }
 
 void Frame::disp(){
@@ -231,10 +238,16 @@ void Frame::update(){
 
 	fillEdge();
 
+	// Display appropriate menu
 	switch (c->mode){
 		case MBC::MODE::MAIN:
 			// bship::log("@Main menu");
 			updateMain();
+			break;
+		case MBC::MODE::PLAY:
+			updatePlay();
+			break;
+		default:
 			break;
 	}
 }
@@ -264,7 +277,7 @@ void Frame::updateMain(){
 
 	// bship::log("Printing buttons");
 	// Display menu selection elements
-	int vStart = 2 * dims.y / 5;
+	int vStart = std::max(2 * dims.y / 5, lVStart + d->logo.getSize() + 1);
 	// int vDim = std::max(2, dims.y / 20);
 	int vDim = 2;
 
@@ -281,7 +294,77 @@ void Frame::updateMain(){
 	}
 
 	// bship::log("Highlighting button");
-	int hiLen = d->maxLen() + 2;
+	int hiLen = c->maxLen() + 2;
+	// Highlights start offset upwards by one
+	--vStart;
+	vStart = vStart + d->selected * vDim;
+	lStart = (dims.x - hiLen) / 2 - 1;
+
+	// Highlight selected button
+	// Regular, no scrollbox behaviour
+	if(d->text[d->selected] == NULL){
+		// Fill corners
+		frame[lStart][vStart] = TLC;
+		frame[lStart][vStart + vDim] = LLC;
+		frame[dims.x - lStart][vStart] = TRC;
+		frame[dims.x - lStart][vStart + vDim] = LRC;
+
+		// Fill edges
+		for(int i = lStart + 1; i < dims.x - lStart; ++i){
+			frame[i][vStart] = frame[i][vStart + vDim] = HBAR;
+		}
+		for(int i = vStart + 1; i < vStart + vDim; ++i){
+			frame[lStart][i] = frame[dims.x - lStart][i] = VBAR;
+		}
+	}
+	// Display scrollbox if one exists
+	else{
+		bship::log("Scrollbox detected");
+	}
+}
+
+void Frame::updatePlay(){
+	PlayMenu * d = static_cast<PlayMenu*>(c);
+
+	// Ensure menu selection wrapping
+	d->selected = (d->selected + c->el.getSize()) % c->el.getSize();
+
+	// bship::log("Printing logo");
+	// Print logo
+	// Centered horizontally
+	int lStart = int (dims.x / 2) - (d->logo[0].length() / 2);
+	// Starts a tenth of the way down
+	int lVStart = std::max(1, int (0.1 * dims.y));
+
+	int logoLines = d->logo.getSize();
+	// Skip /r, /n, and \0 at the end of the string
+	int logoLineLength = d->logo[0].length() - 3;
+	for(int i = 0; i < logoLines; ++i){
+		for(int j = 0; j < logoLineLength; ++j){
+			frame[lStart + j][lVStart + i] = d->logo[i][j];
+		}
+	}
+
+	// bship::log("Printing buttons");
+	// Display menu selection elements
+	int vStart = std::max(2 * dims.y / 5, lVStart + d->logo.getSize() + 1);
+	// int vDim = std::max(2, dims.y / 20);
+	int vDim = 2;
+
+	// Print all buttons
+	string label;
+	int numButtons = c->el.getSize();
+	for(int i = 0; i < numButtons; ++i){
+		label = c->el[i].getLabel();
+		lStart = (dims.x / 2) - (label.length() / 2);
+		for(size_t j = 0; j < label.length(); ++j){
+			frame[lStart + j][vStart + i * vDim] =
+				label[j];
+		}
+	}
+
+	// bship::log("Highlighting button");
+	int hiLen = c->maxLen() + 2;
 	// Highlights start offset upwards by one
 	--vStart;
 	vStart = vStart + d->selected * vDim;
